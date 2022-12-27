@@ -2,6 +2,7 @@ import Button from "./components/Button";
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
 import { useState } from "react"
+import AddTask from "./components/AddTask";
 
 function App() {
   const [tasks, setTasks] = useState([
@@ -41,10 +42,20 @@ function App() {
     setTasks(tasks.map((task) => task.id == id ? {...task, reminder:!task.reminder} : task));
   }
 
+  const addTask = (task) => {
+    console.log("helllo");
+    const id = Math.floor(Math.random()*1000) + 1;
+
+    const newTask = {id, ...task};
+    setTasks([...tasks, newTask]);
+
+  }
+
 
   return (
     <div className='container'>
       <Header title="Task Tracker" />
+      <AddTask onAdd={addTask}/>
       {tasks.length > 0 ? (<Tasks className='task' tasks={tasks}
         onDelete={deletTask} onToggle={onToggle}/>) :
         ('No Task To Show')}
