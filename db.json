@@ -16,12 +16,12 @@
       "id": 4,
       "text": "Playing Soccer",
       "day": "3rd August at 5.30",
-      "reminder": false
+      "reminder": true
     },
     {
       "text": "Saying Hello",
       "day": "3rd April",
-      "reminder": false,
+      "reminder": true,
       "id": 5
     }
   ]
