@@ -1,7 +1,7 @@
 import Button from "./components/Button";
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import AddTask from "./components/AddTask";
 
 function App() {
@@ -9,35 +9,35 @@ function App() {
   const [showAddTask, setShowAddTask] = useState(false)
 
   const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      text: 'Doctors appointment',
-      day: '1st January at 2.30',
-      reminder: true,
-    },
-    {
-      id: 2,
-      text: 'Meeting at school',
-      day: '31st March at 5.30',
-      reminder: true,
-    },
-    {
-      id: 3,
-      text: 'Online Interview',
-      day: '5th May at 4.30',
-      reminder: true,
-    },
-    {
-      id: 4,
-      text: 'Playing Soccer',
-      day: '3rd August at 5.30',
-      reminder: false,
-    }
   ])
 
+  useEffect (() => {
+    const getTask = async () =>{
+      const taskFromServer = await fetchTask();
+      
+      setTasks(taskFromServer);
+    
+    } 
+    getTask();
+  },[])
+
+  //Fetch Task
+
+  const fetchTask = async () =>{
+    const res = await fetch('http://localhost:5000/tasks');
+    const data = await res.json();
+    console.log("JsonData:", data);
+   return data;
+ }
+
   //Delete Task
-  const deletTask = (id) => {
+  const deletTask = async (id) => {
     console.log("Delete", id);
+    await fetch(`http://localhost:5000/tasks/${id}`, {
+      method: 'DELETE'
+    });
+
+    //Delete from UI
     setTasks(tasks.filter((task) => task.id !== id))
   }
   const onToggle = (id) =>{
@@ -45,12 +45,22 @@ function App() {
     setTasks(tasks.map((task) => task.id == id ? {...task, reminder:!task.reminder} : task));
   }
 
-  const addTask = (task) => {
-    console.log("helllo");
-    const id = Math.floor(Math.random()*1000) + 1;
+  const addTask = async (task) => {
+    const res = await fetch(`http://localhost:5000/tasks`, {
+      method: 'POST',
+      headers:{
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(task)
+    });
 
-    const newTask = {id, ...task};
-    setTasks([...tasks, newTask]);
+    const data =  await res.json();
+
+    // console.log("helllo");
+    // const id = Math.floor(Math.random()*1000) + 1;
+
+    // const newTask = {id, ...task};
+    setTasks([...tasks, data]);
 
   }
 
