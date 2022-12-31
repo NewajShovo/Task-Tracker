@@ -101,13 +101,14 @@ function App() {
         <Routes>
           <Route path='/' exact render={(props) => (
             <>
+            console.log("HEllo")
               {showAddTask && <AddTask onAdd={addTask} />}
               {tasks.length > 0 ? (<Tasks className='task' tasks={tasks}
                 onDelete={deletTask} onToggle={onToggle} />) :
                 ('No Task To Show')}
             </>
           )} />
-          <Route path='/about' component={About} />
+          <Route path='/about' element={<About />}/>
         </Routes>
       </Router>
       <Footer />
